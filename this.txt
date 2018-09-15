@@ -1,0 +1,8 @@
+
+* (defun childish () (format t "This IS America..."))
+
+CHILDISH
+* (childish)
+This IS America...
+NIL
+* (quit)
