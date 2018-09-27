@@ -1,0 +1,58 @@
+emacs/slime/lisp commands
+
+Clear REPL (aka clear the REPL screen )
+----------------
+Use C-c M-o, as given in REPL menu's Clear Buffer
+
+Compile function into REPL after cursor
+----------------
+C-c C-c
+
+Kill rest of line or one or more lines (kill-line).
+---------------------------------
+C-k
+
+Open right window
+-----------------
+C-x 3
+
+Close Buffer
+-----------------
+C-x 0
+
+Switch Buffers
+--------------------
+C-x b
+
+Quit current action
+------------------
+C-g
+
+Kill an entire line at once (kill-whole-line)
+----------------------------------
+C-S-backspace
+
+Paste
+-----------------
+C-y
+
+Undo
+------
+C-/
+
+Save buffer to file
+--------------
+C-x C-s
+
+Buffers and Windows
+-------------------
+Open a file, existing or new: 'C-x C-f' – then type the file name.
+Save Buffer: 'C-x C-s'
+Save buffer as a different file (Save As): 'C-x C-w'
+Save all open buffers: 'C-x s'
+Insert a file into buffer: 'C-x i'
+Kill current buffer and open another file: 'C-x C-v'
+Kill (close) a buffer: 'C-x k'
+
+
+exit and kill Emacs, type C-x C-c
