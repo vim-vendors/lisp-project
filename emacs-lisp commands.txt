@@ -1,4 +1,4 @@
-emacs/slime/lisp commands
+EMACS/slime/lisp commands
 
 Clear REPL (aka clear the REPL screen )
 ----------------
@@ -24,6 +24,10 @@ Switch Buffers
 --------------------
 C-x b
 
+Quick Alt Buffer (Reload)
+----------------------
+C-x C-v
+
 Quit current action
 ------------------
 C-g
@@ -31,6 +35,19 @@ C-g
 Kill an entire line at once (kill-whole-line)
 ----------------------------------
 C-S-backspace
+
+Emacs cut and paste
+n C-d： deletes the character under the cursor
+n M-d： kill-word
+n M-Delete： backward-kill-word
+n M-k： kill-sentence
+n C-x： Delete backward-kill-sentence
+n C-k： kill-line
+n C-y ： yank the most recent block
+
+Copy
+----------------
+M-w
 
 Paste
 -----------------
@@ -51,8 +68,30 @@ Save Buffer: 'C-x C-s'
 Save buffer as a different file (Save As): 'C-x C-w'
 Save all open buffers: 'C-x s'
 Insert a file into buffer: 'C-x i'
+
 Kill current buffer and open another file: 'C-x C-v'
 Kill (close) a buffer: 'C-x k'
 
 
 exit and kill Emacs, type C-x C-c
+
+Close current buffer window
+------------------------
+C-x 0
+
+
+LISP
+------------------
+Loading files in lisp
+
+(load "../pathname")
+
+Comments in LISP
+;
+
+Search REPL History
+-----------
+(defun + M-P will allow you to search for functions
+(defvar + M-P searches for variables
+
+etc
