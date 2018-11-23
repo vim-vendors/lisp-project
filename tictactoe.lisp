@@ -23,6 +23,17 @@
 (defun reset-turn()
 	(setf player-turn 0))
 
+;check whose turn it is
+(defun whose-turn()
+	(if (= (+ player-turn 0) 0) 
+		(format t "Player 1's Turn") 
+		(format t "Player 2's Turn")))
+
+;return a turn value based on whose turn it is
+(defun turn-value()
+	(if (= (+ player-turn 0) 0) 0 1))
+
+
 ;hacky way to access player-turn value using s-expression rules
 ;for conditional statements
 (+ player-turn 0)
@@ -60,18 +71,38 @@
 				:element-type 'integer
 				:initial-element 0)))
 
-;based on whose turn it is this function
-;adds +5 or -5 to scores variable
-;for sanity's sake Player 1 is always assigned +5 and vice versa
 
-(defun add-score(new_scores turn)
+;based on whose turn it is this function
+;adds +5 or -5 to scores array
+;for sanity's sake Player 1 is always assigned +5 and vice versa
+(defun add-score(index value)
+	(setf (aref scores index) (+ (aref scores index) value)))
+
+;return a score-value based on whose turn it is
+(defun score-value()
+	(if (= (+ player-turn 0) 0) 5 -5))
+
 ;;create copy of new_scores --> temp_scores
 ;;assign variable +5 or -5 to assign to new_scores list of indexes
 ;;go through scores and +5 or -5 if the index is a match
 ;; for current index use aref to change it then pop temp_scores
 ;;continue until temp_scores is empty
+(format t "~a" (aref scores index))
 
+;checks scores for winner
+(defun game-over()
+	(loop for index from 0 to 7 do
+		(if (= (aref scores index) 15) 
+			(format t "Player One Wins!")
+			(format t ""))
+		(if (= (aref scores index) -15) 
+			(format t "Player Two Wins!" )
+			(format t ""))))
 
+(defun whose-turn()
+	(if (= (+ player-turn 0) 0) 
+		(format t "Player 1's Turn") 
+		(format t "Player 2's Turn")))
 
 
 #| Tic Tac Toe Board Formatting |#
@@ -117,8 +148,9 @@
 ;;set winner
 ;;minmax
 
-(set-board)
-(print-2D)
+(score-board)
+(seto)
+
 ; (print-board)
 
 ;accesses an object in players
