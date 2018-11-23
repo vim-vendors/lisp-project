@@ -14,6 +14,19 @@
 
 (defvar *players* '()) ;defines global-variable players as non-persistent list
 
+;defines turns, starts with Player 1 ie 0
+(defvar player-turn 0)
+
+(defun change-turn ()
+	(setf player-turn (mod (+ player-turn 1) 2)))
+;used to reset game
+(defun reset-turn()
+	(setf player-turn 0))
+
+;hacky way to access player-turn value using s-expression rules
+;for conditional statements
+(+ player-turn 0)
+
 ;sets Player 1 as "O"
 (defun setO()
 	(push player_x *players*)
@@ -37,6 +50,8 @@
 (defun get-token(index)
 	(my_token (nth index *players*)))
 
+
+
 ;creates an array to keep track of score based
 ;on the 8 possible win poitions in tic tac toe
 ;first to get to +15 or -15 wins
@@ -48,7 +63,14 @@
 ;based on whose turn it is this function
 ;adds +5 or -5 to scores variable
 ;for sanity's sake Player 1 is always assigned +5 and vice versa
-(defun add-score(index token))
+
+(defun add-score(new_scores turn)
+;;create copy of new_scores --> temp_scores
+;;assign variable +5 or -5 to assign to new_scores list of indexes
+;;go through scores and +5 or -5 if the index is a match
+;; for current index use aref to change it then pop temp_scores
+;;continue until temp_scores is empty
+
 
 
 
