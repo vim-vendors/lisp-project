@@ -30,8 +30,12 @@
 	(pop *players*))
 
 ;print particular token in players 
-(defun access-token(index)
+(defun print-token(index)
 	(format t "~a" (my_token (nth index *players*))))
+
+;returns string representation of token
+(defun get-token(index)
+	(my_token (nth index *players*)))
 
 ;creates an array to keep track of score based
 ;on the 8 possible win poitions in tic tac toe
@@ -96,6 +100,6 @@
 ; (print-board)
 
 ;accesses an object in players
- (format t "~a" (WIN_STATUS (first *players*)))
+ ;(format t "~a" (WIN_STATUS (first *players*)))
 
 
