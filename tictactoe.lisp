@@ -5,7 +5,6 @@
   	:reader my_token 
   	:initarg :my_token))) ;initial value is the parameter given during initialization 
    ;defines that variable "my_token" is a read only after initialization
-;inital value is 0 votes
 
 (defvar *players* '()) ;defines global-variable players as non-persistent list
 
