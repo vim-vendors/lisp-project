@@ -155,11 +155,11 @@
 
 (defun one-wins()
 	(format t "Player One Wins!")
-	(change-status))
+	(change-status)) ;need to add reset call and game menu call
 
 (defun two-wins()
 	(format t "Player Two Wins!")
-	(change-status))
+	(change-status)) ;need to add reset call and game menu call
 
 ;-------------------------
 #| END Scoring/Choice Game Functions |#
@@ -336,7 +336,7 @@
 	;redraw current board
 	;announce whose turn it is
 	;choose player square - implied validity check
-	;check and update values - scores, validity, display board, game status
+	;check and update values - scores, validity, redraw display board, game status
 	;change turn
 	;if AI chosen go to ai-loop 
 	;else go to play-game
@@ -345,7 +345,7 @@
 	;check game-status
 	;if game over announce winner, reset game and go to game-menu
 	;else run min-max
-	;update values based on min-max - scores, validity, display board, game status
+	;update values based on min-max - scores, validity, redraw display board, game status
 	;change turn
 	;go to play-game
 	)
