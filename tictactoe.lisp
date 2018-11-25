@@ -58,6 +58,17 @@
 
 #| Scoring/Choice Game Functions |#
 ;-------------------------
+;two player game boolean check
+(defvar two-player "true")
+
+;choose one player vs minmax AI game boolean check
+(defun change-two-player() 
+	(setf two-player "false"))
+
+;reset two player game boolean check
+(defun reset-two-player() 
+	(setf two-player "true"))
+
 
 ;defines game-status variable
 (defvar is-game-over "false")
@@ -232,12 +243,69 @@
 
 #| Game Play Functions |#
 ;-------------------------
-
+;generic prompt function
 (defun get-user-input (prompt)
   (format *query-io* "~a: " prompt)
   (force-output *query-io*)
   (read-line *query-io*))
 
+;get and sanitize user input
+(defun get-square-choice()
+	(setf temp (get-user-input "Please enter a square number between 1 and 9"))
+	;convert to integer if possible
+	(if (parse-integer temp :junk-allowed t) 
+		(setf temp (abs (parse-integer temp))) 
+		(user-error))
+	(if (and (bounds-check temp) (= (check-validity (- temp 1))1)) 
+		(implement-choice temp) ;modify input if ncessary and make necessary choices
+		(user-error)))
+;if user choice is valid implement
+(defun implement-choice(index)
+		;update board
+		;update scores
+		;update board vailidity
+	)
+
+(defun user-error()
+	(format t "That input is invalid, please try again.~%")
+	(get-square-choice))
+
+(defun bounds-check(number)
+	(and (>= number 1) (< number 10)))
+
+(defun get-token-choice()
+	(setf temp (get-user-input "Please enter an 'X' or an 'O' to choose your symbol"))
+	;parse user input
+	(setf temp (coerce (subseq (string-upcase temp) 0 1) 'character))
+	;based on user choice assigns player one to a token (X or O)
+	(cond ((char= temp #\X) (player-is-X)) 
+		  ((char= temp #\O) (player-is-O)) 
+		  ((not (or (char= temp #\X) (char= temp #\O))) (token-error))))
+
+(defun choose-multi()
+	(setf temp (get-user-input "Is this a one-player game? Y/N: "))
+	;parse user input
+	(setf temp (coerce (subseq (string-upcase temp) 0 1) 'character))
+	;based on user choice assigns player one to a token (X or O)
+	(cond ((char= temp #\Y) (change-two-player)) 
+		  ((char= temp #\N) (reset-two-player)) 
+		  ((not (or (char= temp #\X) (char= temp #\O))) (token-error-two))))
+
+(defun player-is-X()
+	(format t "Player One is X. Player Two is O.~%")
+	(setX))
+
+(defun player-is-O()
+	(format t "Player One is O. Player Two is X.~%")
+	(setO)) 
+
+(defun token-error()
+	(format t "That input is invalid, please try again.~%")
+	(get-token-choice))
+
+(defun token-error-two()
+	(format t "That input is invalid, please try again.~%")
+	(choose-multi))
 
 ;master game reset
 (defun game-reset()
@@ -246,8 +314,47 @@
 	(empty-board)
 	(reset-game-status)
 	(reset-scores)
-	(reset-valid))
+	(reset-valid)
+	(reset-two-player))
+
 ;Looped menu method
+(defun start-game()
+	;initialize board
+	;initialize scores
+	;initialize validity 
+	;get user tokens and initialize players
+	;go to play-game
+	)
+
+(defun play-game()
+	;check game status
+	;if game over announce winner, reset game and go to game-menu
+	;else go to game-loop
+	)
+
+(defun game-loop()
+	;redraw current board
+	;announce whose turn it is
+	;choose player square - implied validity check
+	;check and update values - scores, validity, display board, game status
+	;change turn
+	;if AI chosen go to ai-loop 
+	;else go to play-game
+	)
+(defun ai-loop()
+	;check game-status
+	;if game over announce winner, reset game and go to game-menu
+	;else run min-max
+	;update values based on min-max - scores, validity, display board, game status
+	;change turn
+	;go to play-game
+	)
+
+(defun game-menu()
+	;play again --> go start-game
+	;exit
+	)
+
 ;-------------------------
 #| END Game Play Functions |#
 
@@ -255,33 +362,6 @@
 
 #| Scratchpad |#
 ;-------------------------
-;get and sanitize user input
-(defun get-square-choice()
-	(setf temp (get-user-input "Please enter a square number between 1 and 9"))
-	;convert to integer if possible
-	(if (parse-integer temp :junk-allowed t) 
-		(setf temp (abs (parse-integer temp))) 
-		(user-error))
-	(if (bounds-check temp) 
-		(print "fuck yeah") ;modify input if ncessary and make necessary choices
-		(user-error))
-	;check to see if board choice is valid
-		)
-
-(defun user-error()
-	(format t "User error please try again~%")
-	(get-square-choice))
-
-(defun bounds-check(number)
-	(and (>= number 1) (< number 10)))
-
-; (defun is-number(check)
-; 	(typep check 'integer))
-
-(defun get-token-choice()
-	(setf temp (get-user-input "Please enter an 'X' or an 'O'"))
-	;validate token choice
-	(print temp))
 
 ;-------------------------
 #| END Scratchpad |#
