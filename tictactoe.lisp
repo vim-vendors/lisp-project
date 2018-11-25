@@ -130,8 +130,7 @@
 		(6 (scoring (write (list 1 5))))
 		(7 (scoring (write (list 2 3 6))))
 		(8 (scoring (write (list 2 4))))
-		(9 (scoring (write (list 2 5 7))))
-		))
+		(9 (scoring (write (list 2 5 7))))))
 
 ;checks scores for winner
 (defun game-check()
@@ -256,24 +255,28 @@
 
 #| Scratchpad |#
 ;-------------------------
-
+;get and sanitize user input
 (defun get-square-choice()
 	(setf temp (get-user-input "Please enter a square number between 1 and 9"))
-	;convert to integer
-	(if (parse-integer temp) (print "fuck yeah") (print "naw dawg"))
-	;(setf temp (abs (parse-integer temp))) 
-	;validate choice
-	;(if (and (bounds-check temp) (is-number temp) ) (print "fuck yeah")(print "naw dawg"))
+	;convert to integer if possible
+	(if (parse-integer temp :junk-allowed t) 
+		(setf temp (abs (parse-integer temp))) 
+		(user-error))
+	(if (bounds-check temp) 
+		(print "fuck yeah") ;modify input if ncessary and make necessary choices
+		(user-error))
+	;check to see if board choice is valid
+		)
 
-	; (print (type-of temp))
-	; (print temp)
-	)
+(defun user-error()
+	(format t "User error please try again~%")
+	(get-square-choice))
 
 (defun bounds-check(number)
 	(and (>= number 1) (< number 10)))
 
-(defun is-number(check)
-	(typep check 'integer))
+; (defun is-number(check)
+; 	(typep check 'integer))
 
 (defun get-token-choice()
 	(setf temp (get-user-input "Please enter an 'X' or an 'O'"))
