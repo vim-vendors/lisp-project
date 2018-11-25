@@ -260,9 +260,10 @@
 (defun get-square-choice()
 	(setf temp (get-user-input "Please enter a square number between 1 and 9"))
 	;convert to integer
-	(setf temp (mod (abs (parse-integer temp)) 10))
+	(if (parse-integer temp) (print "fuck yeah") (print "naw dawg"))
+	;(setf temp (abs (parse-integer temp))) 
 	;validate choice
-	(if (and (bounds-check temp) (is-number temp) ) (print "fuck yeah"))
+	;(if (and (bounds-check temp) (is-number temp) ) (print "fuck yeah")(print "naw dawg"))
 
 	; (print (type-of temp))
 	; (print temp)
