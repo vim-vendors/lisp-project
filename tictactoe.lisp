@@ -194,6 +194,7 @@
 
 ;use this for tic-tac-toe display
 (defun print-2D()
+	(terpri)
 	(format t " ________BOARD____________ ~%")
 	(terpri)
 	(loop for index from 0 to 2 do
