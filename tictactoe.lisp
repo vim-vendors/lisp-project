@@ -110,8 +110,8 @@
 
 ;function to tabulate scores based on a given list
 (defun scoring (list)
-	(let ((temp)))
 	;;create copy of list of scores to update
+	(let ((temp)))
 	(setq temp (copy-tree list))
 	;;go through scores and +5 or -5 if the index is a match
 	(loop for index in temp
@@ -217,7 +217,7 @@
 (defun reset-game-status ()
 	(setf is-game-over "false"))
 
-;reset scores
+;resets scores array to zero
 (defun reset-scores()
 	(loop for index from 0 to 7 do
 	(setf (aref scores index) 0)))
@@ -234,8 +234,12 @@
 #| Game Play Functions |#
 ;-------------------------
 
-(defun get-user-input()
-	((setf i value)))
+(defun get-user-input (prompt)
+  (format *query-io* "~a: " prompt)
+  (force-output *query-io*)
+  (read-line *query-io*))
+
+
 ;master game reset
 (defun game-reset()
 	(reset-players)
@@ -248,5 +252,34 @@
 ;-------------------------
 #| END Game Play Functions |#
 
+
+
+#| Scratchpad |#
+;-------------------------
+
+(defun get-square-choice()
+	(setf temp (get-user-input "Please enter a square number between 1 and 9"))
+	;convert to integer
+	(setf temp (mod (abs (parse-integer temp)) 10))
+	;validate choice
+	(if (and (bounds-check temp) (is-number temp) ) (print "fuck yeah"))
+
+	; (print (type-of temp))
+	; (print temp)
+	)
+
+(defun bounds-check(number)
+	(and (>= number 1) (< number 10)))
+
+(defun is-number(check)
+	(typep check 'integer))
+
+(defun get-token-choice()
+	(setf temp (get-user-input "Please enter an 'X' or an 'O'"))
+	;validate token choice
+	(print temp))
+
+;-------------------------
+#| END Scratchpad |#
 
 
