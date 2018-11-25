@@ -56,7 +56,7 @@
 
 
 
-#| Scoring Game Functions |#
+#| Scoring/Choice Game Functions |#
 ;-------------------------
 
 ;defines game-status variable
@@ -65,6 +65,28 @@
 ;change boolean to indicate the game is over
 (defun change-status()
 	(setf is-game-over "true"))
+
+;build boolean array to define valid board choices
+(defun build-valid()
+	(setf valid-choices (make-array '(9)))
+	(loop for index from 0 to 8 do
+    	(setf (aref valid-choices index) "true")))
+
+
+;update boolean array to define valid board choices
+(defun update-valid(index)
+    	(setf (aref valid-choices index) "false"))
+
+;print "board" array as 1d array - for testing purposes
+(defun print-valid()
+	(loop for index from 0 to 8 do
+		(format t "~a " (aref valid-choices index))))
+
+;returns 1 (true) or 0 (false) to validate choice before proceeding
+(defun check-validity(index)
+	(if (string= (aref valid-choices index) "true") 
+			(+ 1 0)
+			(+ 0 0 )))
 
 ;creates an array to keep track of score based
 ;on the 8 possible win poitions in tic tac toe
@@ -130,7 +152,7 @@
 	(change-status))
 
 ;-------------------------
-#| END Scoring Game Functions |#
+#| END Scoring/Choice Game Functions |#
 
 
 #| Tic Tac Toe Board Formatting |#
@@ -200,6 +222,11 @@
 	(loop for index from 0 to 7 do
 	(setf (aref scores index) 0)))
 
+;reset boolean array for new game
+(defun reset-valid()
+	(loop for index from 0 to 8 do
+    	(setf (aref valid-choices index) "true")))
+
 ;-------------------------
 #| END Game Reset Functions |#
 
@@ -207,13 +234,16 @@
 #| Game Play Functions |#
 ;-------------------------
 
+(defun get-user-input()
+	((setf i value)))
 ;master game reset
 (defun game-reset()
 	(reset-players)
 	(reset-turn)
 	(empty-board)
 	(reset-game-status)
-	(reset-scores))
+	(reset-scores)
+	(reset-valid))
 ;Looped menu method
 ;-------------------------
 #| END Game Play Functions |#
