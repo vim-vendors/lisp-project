@@ -49,14 +49,13 @@
 ;used primarily for testing
 (defun whose-turn()
 	(if (= (+ player-turn 0) 0) 
-		(format t "Player 1's Turn") 
-		(format t "Player 2's Turn")))
+		(format t "Player 1's Turn~%") 
+		(format t "Player 2's Turn~%")))
 ;-------------------------
 #| END Turn Based Functions |#
 
 
-
-#| Scoring/Choice Game Functions |#
+#| Boolean State Functions |#
 ;-------------------------
 ;two player game boolean check
 (defvar two-player "true")
@@ -98,6 +97,13 @@
 	(if (string= (aref valid-choices index) "true") 
 			(+ 1 0)
 			(+ 0 0 )))
+;-------------------------
+#| END Boolean State Functions |#
+
+
+
+#| Scoring/Choice Game Functions |#
+;-------------------------
 
 ;creates an array to keep track of score based
 ;on the 8 possible win poitions in tic tac toe
@@ -153,16 +159,17 @@
 			(two-wins)
 			(format t ""))))
 
+;declares winner and goes to post-game cleanup function
 (defun one-wins()
 	(format t "Player One Wins!")
-	(change-status)) ;need to add reset call and game menu call
+	(post-game)) 
 
 (defun two-wins()
 	(format t "Player Two Wins!")
-	(change-status)) ;need to add reset call and game menu call
+	(post-game)) 
 
 ;-------------------------
-#| END Scoring/Choice Game Functions |#
+#| END Scoring Game Functions |#
 
 
 #| Tic Tac Toe Board Formatting |#
@@ -187,6 +194,8 @@
 
 ;use this for tic-tac-toe display
 (defun print-2D()
+	(format t " ________BOARD____________ ~%")
+	(terpri)
 	(loop for index from 0 to 2 do
 		(loop for inner_index from 0 to 2 do
 			(format t "   ~a   |" (aref my_board (+ (* index 3) inner_index))))
@@ -256,16 +265,21 @@
 	(if (parse-integer temp :junk-allowed t) 
 		(setf temp (abs (parse-integer temp))) 
 		(user-error))
+	;if integer is within bounds and square not already taken
 	(if (and (bounds-check temp) (= (check-validity (- temp 1))1)) 
-		(implement-choice temp) ;modify input if ncessary and make necessary choices
+		(implement-choice temp) 
 		(user-error)))
+
 ;if user choice is valid implement
 (defun implement-choice(index)
-		;update board
-		;update scores
-		;update board vailidity
-	)
+		;update board (index 1-9)
+		(change-square index (get-token (turn-value)))
+		;update scores (index 1-9)
+		(user-score index)
+		;update board vailidity (index 0-8) 
+		(update-valid (- index 1)))
 
+;square choice error correction
 (defun user-error()
 	(format t "That input is invalid, please try again.~%")
 	(get-square-choice))
@@ -273,6 +287,7 @@
 (defun bounds-check(number)
 	(and (>= number 1) (< number 10)))
 
+;Player 1 chooses his token, default assigned to Player 2
 (defun get-token-choice()
 	(setf temp (get-user-input "Please enter an 'X' or an 'O' to choose your symbol"))
 	;parse user input
@@ -282,6 +297,24 @@
 		  ((char= temp #\O) (player-is-O)) 
 		  ((not (or (char= temp #\X) (char= temp #\O))) (token-error))))
 
+;get multi-player choice from user - starts or ends game
+(defun get-menu-choice()
+	(format t "A) Play Game~%")
+	(format t "B) Exit Game~%")
+	(setf temp (get-user-input "Please choose option A or B: "))
+	;parse user input
+	(setf temp (coerce (subseq (string-upcase temp) 0 1) 'character))
+	;based on user choice A or B chooses to start or end game
+	(cond ((char= temp #\A) (start-game)) 
+		  ((char= temp #\B) (game-end)) 
+		  ((not (or (char= temp #\A) (char= temp #\B))) (menu-error))))
+
+;menu choice error correction
+(defun menu-error()
+	(format t "Please choose 'A' or 'B'.~%")
+	(get-menu-choice))
+
+;get multi-player choice from user
 (defun choose-multi()
 	(setf temp (get-user-input "Is this a one-player game? Y/N: "))
 	;parse user input
@@ -289,8 +322,9 @@
 	;based on user choice assigns player one to a token (X or O)
 	(cond ((char= temp #\Y) (change-two-player)) 
 		  ((char= temp #\N) (reset-two-player)) 
-		  ((not (or (char= temp #\X) (char= temp #\O))) (token-error-two))))
+		  ((not (or (char= temp #\Y) (char= temp #\N))) (token-error-two))))
 
+;chooses and announces player order
 (defun player-is-X()
 	(format t "Player One is X. Player Two is O.~%")
 	(setX))
@@ -299,13 +333,21 @@
 	(format t "Player One is O. Player Two is X.~%")
 	(setO)) 
 
+;multi-player error catching
 (defun token-error()
-	(format t "That input is invalid, please try again.~%")
+	(format t "Please choose 'X' or 'O'.~%")
 	(get-token-choice))
 
+;multi-player error catching
 (defun token-error-two()
-	(format t "That input is invalid, please try again.~%")
+	(format t "Please choose 'Y' or 'N'.~%")
 	(choose-multi))
+
+;called from winner function
+(defun post-game()
+	(change-status)
+	(game-reset)
+	(game-menu))
 
 ;master game reset
 (defun game-reset()
@@ -320,50 +362,65 @@
 ;Looped menu method
 (defun start-game()
 	;initialize board
+	(set-board)
 	;initialize scores
+	(create-scores)
 	;initialize validity 
+	(build-valid)
 	;get user tokens and initialize players
+	(get-token-choice)
+	;decide if one or two players
+	(choose-multi)
 	;go to play-game
-	)
+	(play-game))
 
+;pre-game check
 (defun play-game()
 	;check game status
 	;if game over announce winner, reset game and go to game-menu
+	(game-check)
 	;else go to game-loop
-	)
+	(game-loop))
 
+;main body of game
 (defun game-loop()
 	;redraw current board
+	(print-2D)
 	;announce whose turn it is
-	;choose player square - implied validity check
-	;check and update values - scores, validity, redraw display board, game status
+	(whose-turn)
+	;choose player square
+	;check and update values: scores, validity, board status
+	(get-square-choice)
+	;redraw board
+	;(print-2D)
 	;change turn
+	(change-turn)
 	;if AI chosen go to ai-loop 
 	;else go to play-game
-	)
-(defun ai-loop()
+	(play-game))
+
+;(defun ai-loop()
 	;check game-status
 	;if game over announce winner, reset game and go to game-menu
 	;else run min-max
 	;update values based on min-max - scores, validity, redraw display board, game status
 	;change turn
 	;go to play-game
-	)
+	;)
 
 (defun game-menu()
-	;play again --> go start-game
-	;exit
-	)
+	;starts or ends loop
+	(get-menu-choice))
 
+;end game and close REPL
+(defun game-end()
+	(format t "Thank you for playing! Goodbye!~%")
+	(quit))
 ;-------------------------
 #| END Game Play Functions |#
 
 
+(game-menu)
 
-#| Scratchpad |#
-;-------------------------
-
-;-------------------------
-#| END Scratchpad |#
 
 
