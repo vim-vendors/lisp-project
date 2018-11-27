@@ -143,7 +143,7 @@
 		(2 (scoring (write (list 0 4))))
 		(3 (scoring (write (list 0 5 6)))) 
 		(4 (scoring (write (list 1 3))))
-		(5 (scoring (write (list 1 4 6))))
+		(5 (scoring (write (list 1 4 6 7))))
 		(6 (scoring (write (list 1 5))))
 		(7 (scoring (write (list 2 3 6))))
 		(8 (scoring (write (list 2 4))))
@@ -162,10 +162,12 @@
 ;declares winner and goes to post-game cleanup function
 (defun one-wins()
 	(format t "Player One Wins!")
+	(print-2D)
 	(post-game)) 
 
 (defun two-wins()
 	(format t "Player Two Wins!")
+	(print-2D)
 	(post-game)) 
 
 ;-------------------------
@@ -346,7 +348,7 @@
 
 ;called from winner function
 (defun post-game()
-	(change-status)
+	;(change-status)
 	(game-reset)
 	(game-menu))
 
@@ -355,10 +357,11 @@
 	(reset-players)
 	(reset-turn)
 	(empty-board)
-	(reset-game-status)
+	;(reset-game-status)
 	(reset-scores)
 	(reset-valid)
-	(reset-two-player))
+	;(reset-two-player)
+	)
 
 ;Looped menu method
 (defun start-game()
@@ -371,7 +374,7 @@
 	;get user tokens and initialize players
 	(get-token-choice)
 	;decide if one or two players
-	(choose-multi)
+	;(choose-multi)
 	;go to play-game
 	(play-game))
 
@@ -411,6 +414,7 @@
 
 (defun game-menu()
 	;starts or ends loop
+	(terpri)
 	(get-menu-choice))
 
 ;end game and close REPL
