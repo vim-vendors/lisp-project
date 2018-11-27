@@ -97,6 +97,13 @@
 	(if (string= (aref valid-choices index) "true") 
 			(+ 1 0)
 			(+ 0 0 )))
+(defun any-validity()
+	(loop for index from 0 to 8 do
+		(if (string= (aref valid-choices index) "true") 
+			(return-from any-validity (+ 1 0))))
+	(+ 0 0))
+	
+			
 ;-------------------------
 #| END Boolean State Functions |#
 
@@ -263,6 +270,7 @@
 
 ;get and sanitize user input
 (defun get-square-choice()
+
 	(setf temp (get-user-input "Please enter a square number between 1 and 9"))
 	;convert to integer if possible
 	(if (parse-integer temp :junk-allowed t) 
@@ -394,7 +402,10 @@
 	(whose-turn)
 	;choose player square
 	;check and update values: scores, validity, board status
-	(get-square-choice)
+	;quick check for stalemate
+	(cond ((= (any-validity) 1) (get-square-choice)) 
+		  ((= (any-validity) 0) (post-game)))
+	;(get-square-choice)
 	;redraw board
 	;(print-2D)
 	;change turn
@@ -402,6 +413,8 @@
 	;if AI chosen go to ai-loop 
 	;else go to play-game
 	(play-game))
+
+
 
 ;(defun ai-loop()
 	;check game-status
